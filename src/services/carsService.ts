@@ -1,7 +1,7 @@
-import { CarRequest } from "../models/dto/car";
+import { CarRequest, CarResponse } from "../models/dto/car";
 import { Car } from "../models/entity/car";
 import cloudinary from "../../config/cloudinary";
-import CarsRepository from "../repositories/cars";
+import CarsRepository from "../repositories/carsRepository";
 
 class CarServices {
   static async getCars(): Promise<Car[]> {
@@ -9,9 +9,10 @@ class CarServices {
 
     return listCar;
   }
+
   static async getCarsById(queryId: number): Promise<Car[]> {
-    const listCar = await CarsRepository.getCarsById(queryId);
-    return listCar;
+    const carList = await CarsRepository.getCarsById(queryId);
+    return carList;
   }
 
   static async getCarsBySize(querySize: string): Promise<Car[]> {
@@ -28,14 +29,16 @@ class CarServices {
       car_size: car.car_size,
       car_rent_price: car.car_rent_price,
       car_photo: uploadImg.url,
+      create_by: car.create_by,
+      create_at: car.create_at,
     };
     const createdCar = await CarsRepository.uploadCar(carToCreate);
 
     return createdCar;
   }
 
-  static async deleteCarById(queryId: number): Promise<Car | null> {
-    const deletedCar = await CarsRepository.deleteCarById(queryId);
+  static async deleteCarById(queryId: number,  deletedBy: number): Promise<Car | null> {
+    const deletedCar = await CarsRepository.deleteCarById(queryId, deletedBy);
     return deletedCar;
   }
 
@@ -53,6 +56,8 @@ class CarServices {
       car_rent_price: car.car_rent_price,
       car_size: car.car_size,
       car_photo: uploadImg.url,
+      update_by: car.update_by,
+      update_at: car.update_at,
     };
     const updatedCar = await CarsRepository.updateCarById(queryId, carToUpdate);
     return updatedCar;

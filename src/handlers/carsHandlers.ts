@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { DefaultResponse } from "../models/dto/default";
 import { Car } from "../models/entity/car";
 import { CarRequest } from "../models/dto/car";
-import CarsService from "../services/cars";
+import CarsService from "../services/carsService";
 
 class CarsHandler {
   async getCars(req: Request, res: Response) {
@@ -149,7 +149,9 @@ class CarsHandler {
 
   async deleteCarById(req: Request, res: Response) {
     const queryId: number = +req.params.id;
-    const deletedCar: Car | null = await CarsService.deleteCarById(queryId);
+    const userId = req.user.id as number;
+    const deletedCar: Car | null = await 
+    CarsService.deleteCarById(queryId, userId);
 
     if (!deletedCar) {
       const Response: DefaultResponse = {

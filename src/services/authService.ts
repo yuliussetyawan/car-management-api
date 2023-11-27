@@ -2,7 +2,7 @@ import { LoginRequest, RegisterRequest } from "../models/dto/auth";
 import { Auth } from "../models/entity/auth";
 import { ErrorResponse } from "../models/entity/default";
 import { User } from "../models/entity/user";
-import UsersRepository from "../repositories/users";
+import UsersRepository from "../repositories/usersRepository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

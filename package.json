@@ -4,21 +4,30 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev ./src/index.ts"
+    "dev": "ts-node-dev ./src/index.ts",
+    "migrate:up": "knex migrate:up",
+    "migrate:down": "knex migrate:down",
+    "migrate:rollback": "knex migrate:rollback",
+    "migrate:rollbackall": "knex migrate:rollback --all",
+    "seed": "knex seed:run --knexfile ./knexfile.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "@types/express-session": "^1.17.10",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-form-data": "^2.0.22",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.0.1",
     "multer": "^1.4.5-lts.1",
     "objection": "^3.1.2",
     "pg": "^8.11.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
@@ -27,8 +36,10 @@
     "@types/express-form-data": "^2.0.5",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/multer": "^1.4.10",
-    "@types/node": "^20.9.0",
+    "@types/node": "^20.10.0",
     "@types/pg": "^8.10.9",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
   }

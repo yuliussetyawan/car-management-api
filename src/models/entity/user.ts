@@ -7,7 +7,7 @@ export class UserEntity extends Model {
   name!: string;
   profile_picture_url?: string;
   password!: string;
-  role!: string;
+  role?: string;
 
   static get tableName() {
     return "users";

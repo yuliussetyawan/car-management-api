@@ -1,14 +1,19 @@
 import express, { Application } from "express";
-import CarsHandler from "./handlers/cars";
+import UsersHandler from "./handlers/usersHandlers";
+import CarsHandler from "./handlers/carsHandlers";
+import AuthHandler from "./handlers/authHandlers";
 import cloudinaryUpload from "./utils/cloudinaryUpload";
 import AuthMiddleware from "./middlewares/auth";
-import AuthHandler from "./handlers/auth";
+
 import { Context } from "vm";
 import dotenv from "dotenv";
 dotenv.config();
+import { swaggerConfig } from "./utils/swaggerOptions";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
 
 const app: Application = express();
-const PORT: number = 3001;
+const PORT = process.env.APP_PORT || 3001;
 
 app.use(express.json());
 
@@ -20,11 +25,47 @@ declare global {
   }
 }
 
-// Cars Handlers
+// swagger
+const swaggerSpec = swaggerJsdoc(swaggerConfig);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// users handlers
+const usersHandler = new UsersHandler();
+
+// cars handlers
 const carsHandler = new CarsHandler();
 
-// Auth Handlers
+// auth handlers
 const authHandler = new AuthHandler();
+
+// users routes
+app.get(
+  "/api/users",
+  AuthMiddleware.authenticateSuper,
+  usersHandler.getUsersByName
+);
+app.get(
+  "/api/users/:id",
+  AuthMiddleware.authenticateAdmin,
+  usersHandler.getUsersById
+);
+app.post(
+  "/api/users",
+  AuthMiddleware.authenticateAdmin,
+  cloudinaryUpload.single("profile_picture_url"),
+  usersHandler.createUser
+);
+app.delete(
+  "/api/users/:id",
+  AuthMiddleware.authenticateAdmin,
+  usersHandler.deleteUserById
+);
+app.patch(
+  "/api/users/:id",
+  AuthMiddleware.authenticateAdmin,
+  cloudinaryUpload.single("profile_picture_url"),
+  usersHandler.updateUserById
+);
 
 // cars routes
 app.get("/api/cars", AuthMiddleware.authenticateAdmin, carsHandler.getCars);
@@ -56,7 +97,6 @@ app.delete(
   carsHandler.deleteCarById
 );
 
-
 // auth routes
 app.get(
   "/api/auth/me",
@@ -71,6 +111,8 @@ app.post(
 app.post("/api/auth/member-register", authHandler.register);
 app.post("/api/auth/login", authHandler.login);
 
+
+// start server
 app.listen(PORT, () => {
   console.log(`Server is running on localhost:${PORT}`);
 });

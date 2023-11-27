@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import UsersRepository from "../repositories/users";
+import UsersRepository from "../repositories/usersRepository";
 import { TokenPayload } from "../models/entity/auth";
 
 class AuthMiddleware {

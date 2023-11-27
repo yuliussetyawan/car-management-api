@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { DefaultResponse } from "../models/dto/default";
 import { LoginRequest, RegisterRequest } from "../models/dto/auth";
-import AuthService from "../services/auth";
+import AuthService from "../services/authService";
 import { isErrorType } from "../utils/checker";
 
 class AuthHandler {
